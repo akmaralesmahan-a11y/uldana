@@ -1,371 +1,418 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="kk">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0E0D0B" />
-  <meta name="description" content="Жаңатас — Қаратау жотасы баурайындағы тас пен тау қаласы. Табиғаты, тарихы және зәулім ғимараттары." />
-  <title>Жаңатас — тас пен тау қаласы</title>
-  <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+  <title>Кенесары Қасымұлының хандық құрған кезеңдері</title>
+  <meta name="description" content="Кенесары Қасымұлының хандық құрған кезеңдері — интерактивті 3D презентация. 9 сынып оқушысы И. Ұлдана, жетекшісі М. Перизат." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Manrope:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@1,400;1,500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Montserrat:wght@300;400;500;600;700&family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <canvas id="dust" aria-hidden="true"></canvas>
+  <div class="progress"><span id="progressBar"></span></div>
 
-
-  <header class="nav" id="nav">
-    <div class="container nav-inner">
-      <a href="#top" class="logo">
-        <svg class="logo-mark" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <rect width="64" height="64" rx="14" fill="#161412"/>
-          <circle cx="41" cy="23" r="8.5" fill="#D97706"/>
-          <path d="M20 49 L23.5 22.5 Q23.9 19.5 27.5 19.5 Q31.1 19.5 31.5 22.5 L35 49 Z" fill="#C5A059"/>
-          <path d="M13 49 H51" stroke="#C5A059" stroke-width="2.4" stroke-linecap="round"/>
-        </svg>
-        <span class="logo-text">
-          <span class="logo-title">ЖАҢАТАС</span>
-          <span class="logo-sub">тас пен тау қаласы</span>
-        </span>
-      </a>
-      <nav class="nav-links">
-        <a href="#tabigaty">Табиғаты</a>
-        <a href="#taryhy">Тарихы</a>
-        <a href="#gimaryttary">Ғимараттары</a>
-        <a href="#galereya">Галерея</a>
-        <a href="#karta">Карта</a>
-        <a href="#tulgalar">Тұлғалар</a>
-      </nav>
-      <div class="nav-right">
-        <span class="badge-kaz">KAZ</span>
-        <a href="#taryhy" class="btn-cta-outline">1964</a>
-      </div>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">◆</span> Кенесары хан <span class="brand-sep">·</span> 1837–1847</div>
+    <div class="top-right">
+      <div class="counter"><span id="cur">01</span><i>/</i><span id="total">14</span></div>
+      <button class="icon-btn" id="fsBtn" title="Толық экран (F)" aria-label="Толық экран">⛶</button>
     </div>
   </header>
 
-  <main>
-    <!-- ===== HERO ===== -->
-    <section class="hero" id="top">
-      <div class="hero-bg" id="heroBg">
-        <img src="https://images.pexels.com/photos/27740260/pexels-photo-27740260.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Қаратау тас шыңдары" class="hero-bg-img" />
-        <div class="hero-bg-overlay"></div>
+  <nav class="dots" id="dots" aria-label="Слайдтар"></nav>
+
+  <div class="controls">
+    <button class="nav-btn" id="prevBtn" aria-label="Алдыңғы">←</button>
+    <span class="slide-name" id="slideName">Титул</span>
+    <button class="nav-btn" id="nextBtn" aria-label="Келесі">→</button>
+  </div>
+
+  <main class="deck" id="deck">
+
+    <!-- 1. ТИТУЛ -->
+    <section class="slide" data-title="Титул">
+      <div class="bg" style="background-image:url(img/hero.jpg)"></div>
+      <div class="shade shade-left"></div>
+      <div class="shanyrak-wrap" aria-hidden="true">
+        <svg class="shanyrak" viewBox="0 0 400 400">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#f6e3a3"/><stop offset=".5" stop-color="#d4a94e"/><stop offset="1" stop-color="#7a5418"/>
+            </linearGradient>
+          </defs>
+          <circle cx="200" cy="200" r="190" fill="none" stroke="url(#g1)" stroke-width="10"/>
+          <circle cx="200" cy="200" r="172" fill="none" stroke="url(#g1)" stroke-width="2" stroke-dasharray="4 10"/>
+          <circle cx="200" cy="200" r="150" fill="none" stroke="url(#g1)" stroke-width="6"/>
+          <g fill="none" stroke="url(#g1)" stroke-width="9" stroke-linecap="round">
+            <path d="M60 200 Q200 40 340 200"/><path d="M60 200 Q200 360 340 200"/>
+            <path d="M200 60 Q40 200 200 340"/><path d="M200 60 Q360 200 200 340"/>
+            <path d="M95 140 Q200 90 305 140"/><path d="M95 260 Q200 310 305 260"/>
+            <path d="M140 95 Q90 200 140 305"/><path d="M260 95 Q310 200 260 305"/>
+          </g>
+          <g stroke="url(#g1)" stroke-width="3" opacity=".7">
+            <line x1="200" y1="10" x2="200" y2="50"/><line x1="200" y1="350" x2="200" y2="390"/>
+            <line x1="10" y1="200" x2="50" y2="200"/><line x1="350" y1="200" x2="390" y2="200"/>
+            <line x1="66" y1="66" x2="94" y2="94"/><line x1="306" y1="306" x2="334" y2="334"/>
+            <line x1="334" y1="66" x2="306" y2="94"/><line x1="94" y1="306" x2="66" y2="334"/>
+          </g>
+        </svg>
+        <div class="shanyrak-glow"></div>
       </div>
-
-      <div class="hero-sun" id="heroSun"></div>
-
-      <div class="hero-dust" aria-hidden="true">
-        <span class="particle" style="left:12%;bottom:30%;width:3px;height:3px;animation-duration:7s"></span>
-        <span class="particle" style="left:22%;bottom:18%;width:2px;height:2px;animation-duration:9s;animation-delay:1.2s"></span>
-        <span class="particle" style="left:38%;bottom:26%;width:4px;height:4px;animation-duration:8s;animation-delay:2.1s"></span>
-        <span class="particle" style="left:55%;bottom:15%;width:2px;height:2px;animation-duration:10s;animation-delay:.6s"></span>
-        <span class="particle" style="left:68%;bottom:28%;width:3px;height:3px;animation-duration:7.5s;animation-delay:1.8s"></span>
-        <span class="particle" style="left:80%;bottom:20%;width:2px;height:2px;animation-duration:9.5s;animation-delay:.3s"></span>
-        <span class="particle" style="left:90%;bottom:32%;width:3px;height:3px;animation-duration:8.5s;animation-delay:2.6s"></span>
-        <span class="particle" style="left:47%;bottom:36%;width:2px;height:2px;animation-duration:11s;animation-delay:1.5s"></span>
-      </div>
-
-      <div class="hero-scene" id="heroScene">
-        <div class="hero-layer hero-layer-far" id="layerFar">
-          <svg viewBox="0 0 1440 480" preserveAspectRatio="none">
-            <path d="M0,300 L90,240 L180,275 L280,190 L370,250 L470,170 L560,235 L660,150 L760,225 L870,180 L980,250 L1080,160 L1180,230 L1290,195 L1440,255 L1440,480 L0,480 Z" fill="#1C1915" opacity="0.85"/>
-          </svg>
-        </div>
-        <div class="hero-layer hero-layer-near" id="layerNear">
-          <svg viewBox="0 0 1440 480" preserveAspectRatio="none">
-            <path d="M0,360 L120,300 L240,340 L360,270 L480,330 L620,255 L760,320 L900,270 L1040,330 L1180,275 L1320,335 L1440,290 L1440,480 L0,480 Z" fill="#131110"/>
-            <path d="M0,360 L120,300 L240,340 L360,270 L480,330 L620,255 L760,320 L900,270 L1040,330 L1180,275 L1320,335 L1440,290" fill="none" stroke="#D97706" stroke-opacity="0.22" stroke-width="1.5"/>
-          </svg>
-        </div>
-      </div>
-
-      <div class="hero-content" id="heroContent">
-        <p class="hero-eyebrow"><span class="eyebrow-line"></span>Жамбыл облысы · Қаратау бөктері · 1964</p>
-        <h1 class="hero-title">
-          <span class="mask"><span class="mask-inner" style="transition-delay:.25s">ЖАҢАТАС</span></span>
-          <span class="mask mt-small"><span class="mask-inner serif" style="transition-delay:.42s">тас тарихымен жаңғырған қала</span></span>
+      <div class="content title-content">
+        <p class="kicker a" style="--d:.1s">Қазақстан тарихы · Зерттеу жұмысы</p>
+        <h1 class="title a" style="--d:.25s">
+          <span class="gold">Кенесары Қасымұлының</span>
+          <span class="title-em">хандық құрған</span>
+          <span class="gold">кезеңдері</span>
         </h1>
-        <p class="hero-desc">
-          Аты «жаңа тас» деген мағынаны білдіретін, Қаратау жотасының баурайындағы,
-          фосфорит кені мен далалық желдің өлкесі. Табиғаты, тарихы және зәулім
-          ғимараттары — бәрі бір кеңістікте.
-        </p>
-        <div class="hero-ctas">
-          <a href="#tabigaty" class="btn-primary">Табиғатын көру</a>
-          <a href="#taryhy" class="btn-ghost">Тарихына сүңгу</a>
+        <p class="lead a" style="--d:.45s">1837–1847 жылдардағы ұлт-азаттық қозғалыс және соңғы қазақ хандығының тарихы</p>
+        <div class="authors a" style="--d:.65s">
+          <div class="author tilt">
+            <span class="author-label">Орындаған</span>
+            <span class="author-name">И. Ұлдана</span>
+            <span class="author-sub">9 сынып оқушысы</span>
+          </div>
+          <div class="author tilt">
+            <span class="author-label">Жетекшісі</span>
+            <span class="author-name">М. Перизат</span>
+            <span class="author-sub">тарих пәні</span>
+          </div>
         </div>
-        <p class="hero-coords">43°36′ N · 69°27′ E — Мойынқұм ауданы, Қазақстан</p>
-      </div>
-
-      <div class="scroll-hint">
-        <span>төмен</span>
-        <span class="scroll-drip"></span>
+        <button class="btn-gold a" style="--d:.85s" data-go="1">Саяхатты бастау <b>→</b></button>
+        <p class="hint a" style="--d:1.1s">← → пернелері, тышқан дөңгелегі немесе экранды сырғыту арқылы ауысыңыз</p>
       </div>
     </section>
 
-    <!-- ===== MARQUEE ===== -->
-    <section class="marquee">
-      <div class="marquee-track">
-        <div class="marquee-group">
-          <span>Жаңатас</span><i></i><span>Қаратау баурайы</span><i></i><span>Жаңа тастан өрлеген қала</span><i></i><span>Зәулім сәулет</span><i></i><span>Табиғи күш</span><i></i><span>1964 жылдан бастау алады</span><i></i>
+    <!-- 2. МАЗМҰНЫ -->
+    <section class="slide" data-title="Мазмұны">
+      <div class="bg" style="background-image:url(img/steppe.jpg)"></div>
+      <div class="shade"></div>
+      <div class="content">
+        <p class="kicker a">Жоспар</p>
+        <h2 class="h2 a" style="--d:.1s">Презентация <span class="gold">мазмұны</span></h2>
+        <div class="toc">
+          <button class="toc-item tilt a" style="--d:.15s" data-go="2"><i>01</i><span>Кенесары кім?</span></button>
+          <button class="toc-item tilt a" style="--d:.2s" data-go="3"><i>02</i><span>Көтерілістің себептері</span></button>
+          <button class="toc-item tilt a" style="--d:.25s" data-go="4"><i>03</i><span>Хан сайлануы — 1841</span></button>
+          <button class="toc-item tilt a" style="--d:.3s" data-go="5"><i>04</i><span>Интерактивті карта</span></button>
+          <button class="toc-item tilt a" style="--d:.35s" data-go="6"><i>05</i><span>Тарихқа саяхат</span></button>
+          <button class="toc-item tilt a" style="--d:.4s" data-go="7"><i>06</i><span>Негізгі кезеңдер</span></button>
+          <button class="toc-item tilt a" style="--d:.45s" data-go="8"><i>07</i><span>Басқару жүйесі</span></button>
+          <button class="toc-item tilt a" style="--d:.5s" data-go="9"><i>08</i><span>Серіктері</span></button>
+          <button class="toc-item tilt a" style="--d:.55s" data-go="10"><i>09</i><span>Қозғалыстың аяқталуы</span></button>
+          <button class="toc-item tilt a" style="--d:.6s" data-go="11"><i>10</i><span>Тарихи маңызы</span></button>
+          <button class="toc-item tilt a" style="--d:.65s" data-go="12"><i>11</i><span>Қорытынды</span></button>
         </div>
-        <div class="marquee-group" aria-hidden="true">
-          <span>Жаңатас</span><i></i><span>Қаратау баурайы</span><i></i><span>Жаңа тастан өрлеген қала</span><i></i><span>Зәулім сәулет</span><i></i><span>Табиғи күш</span><i></i><span>1964 жылдан бастау алады</span><i></i>
-        </div>
-      </div>
-      <div class="marquee-fade marquee-fade-l"></div>
-      <div class="marquee-fade marquee-fade-r"></div>
-    </section>
-
-    <!-- ===== STATS ===== -->
-    <section class="container stats">
-      <div class="stat reveal">
-        <p class="stat-value"><span data-count="1964">0</span></p>
-        <p class="stat-label">қаланың негізі қаланды</p>
-      </div>
-      <div class="stat reveal">
-        <p class="stat-value"><span data-count="1969">0</span></p>
-        <p class="stat-label">қала мәртебесі берілді</p>
-      </div>
-      <div class="stat reveal">
-        <p class="stat-value"><span data-count="60">0</span>+</p>
-        <p class="stat-label">жылдық тарих</p>
       </div>
     </section>
 
-    <!-- ===== NATURE ===== -->
-    <section class="container section" id="tabigaty">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow reveal"><span class="eyebrow-line"></span><em>01</em>Табиғаты</p>
-          <h2 class="h2">
-            <span class="mask"><span class="mask-inner">Қаратау қойнауындағы</span></span>
-            <span class="mask"><span class="mask-inner lime" style="transition-delay:.12s">тіршілік</span></span>
-          </h2>
-        </div>
-        <div class="section-lead">
-          <p class="lead reveal">
-            Жаңатас Қаратау жотасының етегінде, шөл дала мен тау көрінісінің
-            түйіскен жерінде орналасқан. Қала айналасы тас жоталар, эрозиялық
-            шатқалдар және минералды байлыққа толы өңір — мұнда тас пен жан
-            бір-бірін тыныста тапқандай.
-          </p>
-          <div class="chips reveal">
-            <span>Қаратау жотасы</span><span>Дала флорасы</span><span>Минерал байлық</span><span>Эрозиялық шатқалдар</span>
+    <!-- 3. КЕНЕСАРЫ КІМ -->
+    <section class="slide" data-title="Кенесары кім?">
+      <div class="bg" style="background-image:url(img/council.jpg)"></div>
+      <div class="shade shade-strong"></div>
+      <div class="content">
+        <div class="split">
+          <div class="portrait-stage a" style="--d:.1s">
+            <div class="portrait tilt">
+              <img src="img/portrait.jpg" alt="Кенесары ханның көркем бейнесі" />
+              <div class="portrait-frame"></div>
+              <div class="portrait-cap">Кенесары Қасымұлы<br><small>1802 — 1847</small></div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="nature-grid">
-        <figure class="frame span-7 reveal">
-          <img src="https://images.unsplash.com/photo-1786992688784-6d0c2459447e?crop=entropy&cs=srgb&fm=jpg&q=85" alt="Эрозиялық тас шатқалдар" loading="lazy" />
-          <figcaption><span>Тас жоталар — желмен ойылған шатқалдар</span><em>Қаратау</em></figcaption>
-        </figure>
-        <figure class="frame span-5 reveal delay-1">
-          <img src="https://images.unsplash.com/photo-1598998444962-50163447af72?crop=entropy&cs=srgb&fm=jpg&q=85" alt="Күн батқан дала" loading="lazy" />
-          <figcaption><span>Дала кеңістігі — алтын сағат</span><em>Қаратау</em></figcaption>
-        </figure>
-        <figure class="frame span-5 reveal">
-          <img src="https://images.pexels.com/photos/5408006/pexels-photo-5408006.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Тау етегіндегі дала" loading="lazy" />
-          <figcaption><span>Тау етегі — түнгі бұлттар астында</span><em>Қаратау</em></figcaption>
-        </figure>
-        <figure class="frame span-7 reveal delay-1">
-          <img src="https://images.pexels.com/photos/17309770/pexels-photo-17309770.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Тас шыңдар" loading="lazy" />
-          <figcaption><span>Сілем шыңдары — бұлыңғыр таң</span><em>Қаратау</em></figcaption>
-        </figure>
-      </div>
-    </section>
-
-    <!-- ===== HISTORY ===== -->
-    <section class="history-wrap" id="taryhy">
-      <div class="container section history-grid">
-        <div class="history-left">
-          <p class="eyebrow reveal"><span class="eyebrow-line"></span><em>02</em>Тарихы</p>
-          <h2 class="h2">
-            <span class="mask"><span class="mask-inner">Тасқа</span></span>
-            <span class="mask"><span class="mask-inner" style="transition-delay:.12s">жазылған <span class="lime">жылдар</span></span></span>
-          </h2>
-          <p class="lead reveal">
-            Жаңатастың тарихы — жастығы жүздеген жылға жетпейтін, бірақ
-            мінсіз айқын қала тарихы: дала ортасындағы тас еңбегімен
-            өрлеген өркениет.
-          </p>
-        </div>
-        <div class="timeline">
-          <div class="timeline-item reveal">
-            <p class="tl-year">1964</p>
-            <h3>Кент негізі</h3>
-            <p>Қаратау қойнауындағы фосфорит кенін игеру үшін Жаңатас кентінің негізі қаланды. Алғашқы геологтар мен құрылысшылар бос далаға алғашқы қазықшаны қақты.</p>
-          </div>
-          <div class="timeline-item reveal">
-            <p class="tl-year">1969</p>
-            <h3>Қала мәртебесі</h3>
-            <p>Жаңатас ресми түрде қала мәртебесіне ие болды. Кішкене кент тез өсіп, жұмысшылар кентінен нағыз қалаға айналды.</p>
-          </div>
-          <div class="timeline-item reveal">
-            <p class="tl-year">1970–1980</p>
-            <h3>Индустриялық өркендеу</h3>
-            <p>Ірі химия өндірісі, зәулім бес қабатты тұрғын үйлер, мектептер мен мәдениет ошақтары салынды. Қала өзінің «алтын заманын» бастан кешірді.</p>
-          </div>
-          <div class="timeline-item reveal">
-            <p class="tl-year">1990-жылдар</p>
-            <h3>Қайта құру кезеңі</h3>
-            <p>Кеңес дәуірі аяқталған соң өндіріс тоқтап, қала жаңа заманға бейімделу қиындығынан өтті.</p>
-          </div>
-          <div class="timeline-item reveal">
-            <p class="tl-year">Бүгін</p>
-            <h3>Тас пен тау құшағында</h3>
-            <p>Жаңатас қазір тыныш, күн сәулелі қала — тарихын сақтап, табиғатымен күн көріп отыр. Өткеннің іздері әрбір көшесінде.</p>
+          <div>
+            <p class="kicker a" style="--d:.15s">Тұлға</p>
+            <h2 class="h2 a" style="--d:.25s">Кенесары <span class="gold">Қасымұлы</span></h2>
+            <p class="lead a" style="--d:.35s">Қазақ халқының соңғы ханы, 1837–1847 жылдардағы ұлт-азаттық қозғалыстың көсемі. Ұлы Абылай ханның немересі, Қасым сұлтанның ұлы.</p>
+            <ul class="list a" style="--d:.45s">
+              <li>1802 жылы Орта жүз жерінде, төре әулетінде дүниеге келген.</li>
+              <li>Жастайынан әкесі Қасым сұлтан мен ағалары Саржан, Есенгелдінің жанында азаттық күресіне араласты.</li>
+              <li>Әкесі мен ағасы Саржан Қоқан билеушілерінің қолынан қаза тапты — бұл оның күрес жолын шыңдай түсті.</li>
+              <li>Батыл қолбасшы, шебер дипломат, ақылды мемлекет қайраткері ретінде танылды.</li>
+            </ul>
+            <div class="chips a" style="--d:.55s">
+              <span class="chip"><b>1802</b> туған жылы</span>
+              <span class="chip"><b>1837</b> көтеріліс басы</span>
+              <span class="chip"><b>1841</b> хан сайланды</span>
+              <span class="chip"><b>1847</b> қаза тапты</span>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ===== BUILDINGS ===== -->
-    <section class="container section" id="gimaryttary">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow reveal"><span class="eyebrow-line"></span><em>03</em>Зәулім ғимараттары</p>
-          <h2 class="h2">
-            <span class="mask"><span class="mask-inner">Кеңес модернизмінің</span></span>
-            <span class="mask"><span class="mask-inner lime" style="transition-delay:.12s">іздері</span></span>
-          </h2>
+    <!-- 4. СЕБЕПТЕРІ -->
+    <section class="slide" data-title="Көтерілістің себептері">
+      <div class="bg" style="background-image:url(img/steppe.jpg)"></div>
+      <div class="shade shade-strong"></div>
+      <div class="content">
+        <p class="kicker a">Тарихи алғышарттар</p>
+        <h2 class="h2 a" style="--d:.1s">Көтерілістің <span class="gold">себептері</span></h2>
+        <div class="grid3">
+          <article class="card tilt a" style="--d:.15s"><i class="num">01</i><h3>Хандық биліктің жойылуы</h3><p>1822 жылғы «Сібір қырғыздары туралы жарғы» Орта жүзде, 1824 жылы Кіші жүзде хан билігін жойды.</p></article>
+          <article class="card tilt a" style="--d:.22s"><i class="num">02</i><h3>Жердің тартып алынуы</h3><p>Қазақ даласында бекіністер, округтер мен казак станицалары салынып, шұрайлы жайылымдар тартып алынды.</p></article>
+          <article class="card tilt a" style="--d:.29s"><i class="num">03</i><h3>Салықтың көбеюі</h3><p>Түтін салығы мен түрлі алымдар халықтың әлеуметтік жағдайын күрт нашарлатты.</p></article>
+          <article class="card tilt a" style="--d:.36s"><i class="num">04</i><h3>Сұлтандардың құқығы шектелді</h3><p>Ата-бабадан келе жатқан басқару дәстүрі бұзылып, билік патша шенеуніктерінің қолына өтті.</p></article>
+          <article class="card tilt a" style="--d:.43s"><i class="num">05</i><h3>Қоқан хандығының езгісі</h3><p>Оңтүстіктегі қазақтар Қоқан бектерінің ауыр салығы мен зорлығына ұшырады.</p></article>
+          <article class="card tilt a" style="--d:.5s"><i class="num">06</i><h3>Тәуелсіздікке ұмтылыс</h3><p>Басты мақсат — Абылай хан заманындағы тәуелсіз, біртұтас қазақ мемлекетін қалпына келтіру.</p></article>
         </div>
-        <div class="section-lead">
-          <p class="lead reveal">
-            Қала сәулеті — өткен дәуірдің баспалдақ тектес бес қабатты үйлері
-            мен қатты бетон панельдік тұрғын алаптары. Тас өлкенің сәулеті де
-            текті, мығым — күн батырда қасбеттері балқыма сияқты жылтылдап тұрады.
-          </p>
-        </div>
-      </div>
-      <div class="bento-grid">
-        <figure class="frame span-7 reveal">
-          <img src="https://images.unsplash.com/photo-1770053472486-d766458a2dd0?crop=entropy&cs=srgb&fm=jpg&q=85" alt="Бес қабатты тұрғын үйлер" loading="lazy" />
-          <figcaption><span class="cap-title">Бес қабатты тұрғын алаптар</span><span class="cap-note">1970–1980 · тұрғын қор</span></figcaption>
-          <b class="frame-index">01</b>
-        </figure>
-        <figure class="frame span-5 reveal delay-1">
-          <img src="https://images.pexels.com/photos/40015475/pexels-photo-40015475.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Панельдік тұрғын үй қасбеті" loading="lazy" />
-          <figcaption><span class="cap-title">Панельдік сәулет — қатаң ырғақ</span><span class="cap-note">Кеңес модернизмі</span></figcaption>
-          <b class="frame-index">02</b>
-        </figure>
-        <figure class="frame span-5 reveal">
-          <img src="https://images.unsplash.com/photo-1770053472394-875cc4a69e3a?crop=entropy&cs=srgb&fm=jpg&q=85" alt="Үйлер арасындағы өткел" loading="lazy" />
-          <figcaption><span class="cap-title">Үйлерді байланыстырған өткелдер</span><span class="cap-note">Аула кеңістігі</span></figcaption>
-          <b class="frame-index">03</b>
-        </figure>
-        <figure class="frame span-7 reveal delay-1">
-          <img src="https://images.pexels.com/photos/11888356/pexels-photo-11888356.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Қаланың жоғарыдан көрінісі" loading="lazy" />
-          <figcaption><span class="cap-title">Үстірттен көрініс — қала жоспары</span><span class="cap-note">Желдегі бағыт</span></figcaption>
-          <b class="frame-index">04</b>
-        </figure>
       </div>
     </section>
 
-    <!-- ===== GALLERY ===== -->
-    <section class="gallery-wrap" id="galereya">
-      <div class="container">
-        <p class="eyebrow reveal"><span class="eyebrow-line"></span><em>04</em>Галерея</p>
-        <h2 class="h2">
-          <span class="mask"><span class="mask-inner">Кадрлардағы <span class="lime">Жаңатас</span></span></span>
-        </h2>
-      </div>
-      <div class="gallery-row reveal">
-        <figure><img src="https://images.unsplash.com/photo-1574726252024-83b799196f99?crop=entropy&cs=srgb&fm=jpg&q=85" alt="Даладағы күн батқан" loading="lazy"/><figcaption>Даладағы күн батқан</figcaption></figure>
-        <figure><img src="https://images.pexels.com/photos/33770617/pexels-photo-33770617.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Алтын дала" loading="lazy"/><figcaption>Алтын дала</figcaption></figure>
-        <figure><img src="https://images.unsplash.com/photo-1551458601-14e8150ece4b?crop=entropy&cs=srgb&fm=jpg&q=85" alt="Тас кен оқпаны" loading="lazy"/><figcaption>Тас кен оқпаны</figcaption></figure>
-        <figure><img src="https://images.unsplash.com/photo-1659362549741-c32157cc71f4?crop=entropy&cs=srgb&fm=jpg&q=85" alt="Кен өнеркәсібі" loading="lazy"/><figcaption>Кен өнеркәсібі</figcaption></figure>
-        <figure><img src="https://images.unsplash.com/photo-1759660019810-ee4d9eb0967d?crop=entropy&cs=srgb&fm=jpg&q=85" alt="Жартас құрылымы" loading="lazy"/><figcaption>Жартас құрылымы</figcaption></figure>
-        <figure><img src="https://images.unsplash.com/photo-1730744741007-760cdbfeb1ac?crop=entropy&cs=srgb&fm=jpg&q=85" alt="Қарлы жоталар" loading="lazy"/><figcaption>Қарлы жоталар</figcaption></figure>
+    <!-- 5. ХАН САЙЛАНУЫ -->
+    <section class="slide" data-title="Хан сайлануы — 1841">
+      <div class="bg" style="background-image:url(img/khan.jpg)"></div>
+      <div class="shade shade-right"></div>
+      <div class="content">
+        <div class="split split-year">
+          <div class="year-stage a" style="--d:.1s">
+            <div class="year3d" data-year="1841"></div>
+            <p class="year-caption">жылдың күзі · Сарыарқа</p>
+          </div>
+          <div>
+            <p class="kicker a" style="--d:.2s">Ақ киізге көтеру</p>
+            <h2 class="h2 a" style="--d:.3s">Кенесары — <span class="gold">бүкіл қазақтың ханы</span></h2>
+            <p class="lead a" style="--d:.4s">1841 жылы үш жүздің өкілдері жиналған құрылтайда Кенесары Қасымұлы ата-баба салты бойынша ақ киізге көтеріліп, хан болып жарияланды. Абылайдан кейін үш жүзді бір туның астына біріктірген хан осы еді.</p>
+            <ol class="steps a" style="--d:.5s">
+              <li><b>Құрылтай</b><span>Үш жүздің билері, батырлары, сұлтандары жиналды</span></li>
+              <li><b>Ақ киіз</b><span>Ханды ақ киізге отырғызып, көтеру — биліктің заңды белгісі</span></li>
+              <li><b>Ту мен ант</b><span>Хан туы көтеріліп, батырлар адалдыққа ант берді</span></li>
+            </ol>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- ===== MAP ===== -->
-    <section class="container section" id="karta">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow reveal"><span class="eyebrow-line"></span><em>05</em>Карта</p>
-          <h2 class="h2"><span class="mask"><span class="mask-inner">Жаңатас</span></span>
-          <span class="mask"><span class="mask-inner lime" style="transition-delay:.12s">картада</span></span></h2>
+    <!-- 6. КАРТА -->
+    <section class="slide slide-map" data-title="Интерактивті карта">
+      <div class="bg" style="background-image:url(img/steppe.jpg)"></div>
+      <div class="shade shade-strong"></div>
+      <div class="content content-wide">
+        <div class="map-head a">
+          <div>
+            <p class="kicker">Тарихи география</p>
+            <h2 class="h2 h2-sm">Кенесары жорықтарының <span class="gold">картасы</span></h2>
+          </div>
+          <div class="map-actions">
+            <button class="btn-gold btn-sm" id="tourBtn">▶ Жорық жолымен саяхат</button>
+            <button class="btn-ghost btn-sm" id="overviewBtn">Барлығын көру</button>
+          </div>
         </div>
-        <div class="section-lead"><p class="lead reveal">Жамбыл облысы, Сарысу ауданының орталығы. Тараздан солтүстік-батысқа қарай шамамен 170 км, Қаратау жотасының солтүстік беткейінде, Бүркітті өзенінің жағасында орналасқан.</p></div>
+        <div class="map-layout a" style="--d:.15s">
+          <div class="map-frame">
+            <div id="map"></div>
+            <div class="map-legend">
+              <span><i class="lg lg-k"></i>Кенесары қозғалысы</span>
+              <span><i class="lg lg-r"></i>Патша әкімшілігі</span>
+              <span><i class="lg lg-area"></i>Хандықтың шамамен аумағы</span>
+            </div>
+          </div>
+          <aside class="map-side">
+            <div class="place-info" id="placeInfo">
+              <span class="pi-year">1837–1847</span>
+              <h3>Картаны зерттеңіз</h3>
+              <p>Белгілерді басыңыз немесе «Жорық жолымен саяхат» батырмасы арқылы Кенесары ханның жолын бастан-аяқ қадағалаңыз.</p>
+            </div>
+            <div class="place-list" id="placeList"></div>
+          </aside>
+        </div>
       </div>
-      <div class="map-frame reveal">
-        <iframe title="Жаңатас картасы" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=69.60%2C43.50%2C69.87%2C43.64&amp;layer=mapnik&amp;marker=43.5705%2C69.7335"></iframe>
-      </div>
-      <p class="map-link"><a href="https://www.openstreetmap.org/?mlat=43.5705&amp;mlon=69.7335#map=13/43.5705/69.7335" target="_blank" rel="noopener">Үлкен картада ашу →</a></p>
     </section>
 
-    <!-- ===== PEOPLE ===== -->
-    <section class="container section" id="tulgalar">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow reveal"><span class="eyebrow-line"></span><em>06</em>Тұлғалар</p>
-          <h2 class="h2"><span class="mask"><span class="mask-inner">Сарысу жерінің</span></span>
-          <span class="mask"><span class="mask-inner lime" style="transition-delay:.12s">мақтанышы</span></span></h2>
+    <!-- 7. ТАРИХҚА САЯХАТ -->
+    <section class="slide" data-title="Тарихқа саяхат">
+      <div class="bg" style="background-image:url(img/battle.jpg)"></div>
+      <div class="shade shade-strong"></div>
+      <div class="content content-wide">
+        <div class="tl-head a">
+          <div>
+            <p class="kicker">Жылдар бойынша</p>
+            <h2 class="h2 h2-sm">Тарихқа <span class="gold">саяхат</span></h2>
+          </div>
+          <button class="btn-ghost btn-sm" id="tlPlay">▶ Автоойнату</button>
         </div>
-        <div class="section-lead"><p class="lead reveal">Жаңатас — Сарысу ауданының орталығы. Осы өңірден шыққан, елге есімі мәлім азаматтар.</p></div>
-      </div>
-      <div class="people-grid">
-        <article class="person reveal">
-          <p class="person-years">1937 —</p>
-          <h3 class="person-name">Асанәлі Әшімов</h3>
-          <p class="person-role">Актер, режиссер, Қазақстанның Еңбек Ері</p>
-          <p class="person-bio">1937 жылы 8 мамырда Сарысу ауданы, Жайылма ауылында туған. Соғыс жылдарындағы ауыр балалық шақтан кейін өнер жолын таңдап, кеңестік және қазақстандық кино мен театрдың көрнекті тұлғасына айналды. «Транссібір экспресі», «Қыз Жібек», «Атаманның ақыры» фильмдеріндегі рөлдерімен танымал. Қазақ КСР халық әртісі (1976), КСРО халық әртісі (1980), Қазақ КСР (1973) және КСРО (1974) Мемлекеттік сыйлықтарының лауреаты. М. Әуезов атындағы драма театрының көркемдік жетекшісі, профессор. 2017 жылы «Қазақстанның Еңбек Ері» атағы берілді.</p>
-        </article>
-        <article class="person reveal delay-1">
-          <p class="person-years">1941 — 2020</p>
-          <h3 class="person-name">Берік Шаханұлы</h3>
-          <p class="person-role">Жазушы, аудармашы</p>
-          <p class="person-bio">Сарысу ауданы, Жайылма ауылында туған. Мектептен кейін екі жыл шопан болып, кейін ҚазМУ-дің журналистика бөлімін бітірген. «Еңбек туы», «Лениншіл жас» газеттерінде, «Жазушы» баспасында, «Жұлдыз» журналында қызмет етті; 2002 жылдан Жазушылар одағы басқармасы төрағасының орынбасары. «Ғашықтың тілі», «Ақ иірім», «Қаратаудың самалы», «Құса» кітаптарының авторы. «Құса» жинағы үшін халықаралық «Алаш» сыйлығын алды (1992). Қазақстанның еңбек сіңірген қайраткері. 2020 жылы Алматыда дүниеден өтті.</p>
-        </article>
+        <div class="tl-stage a" style="--d:.15s">
+          <button class="tl-arrow" id="tlPrev" aria-label="Алдыңғы жыл">‹</button>
+          <article class="tl-card" id="tlCard">
+            <div class="tl-year" id="tlYear">1837</div>
+            <div class="tl-body">
+              <span class="tl-tag" id="tlTag">Бастама</span>
+              <h3 id="tlTitle">Көтерілістің басталуы</h3>
+              <p id="tlText"></p>
+            </div>
+          </article>
+          <button class="tl-arrow" id="tlNext" aria-label="Келесі жыл">›</button>
+        </div>
+        <div class="tl-track a" style="--d:.3s">
+          <div class="tl-line"><span id="tlFill"></span></div>
+          <div class="tl-nodes" id="tlNodes"></div>
+        </div>
       </div>
     </section>
+
+    <!-- 8. НЕГІЗГІ КЕЗЕҢДЕР -->
+    <section class="slide" data-title="Негізгі кезеңдер">
+      <div class="bg" style="background-image:url(img/hero.jpg)"></div>
+      <div class="shade shade-strong"></div>
+      <div class="content">
+        <p class="kicker a">Үш кезең</p>
+        <h2 class="h2 a" style="--d:.1s">Қозғалыстың <span class="gold">негізгі кезеңдері</span></h2>
+        <p class="sub a" style="--d:.15s">Карточкаларды басып, аударып көріңіз</p>
+        <div class="phases">
+          <div class="flip a" style="--d:.2s" tabindex="0">
+            <div class="flip-in">
+              <div class="flip-face front"><span class="ph-n">I</span><span class="ph-y">1837 – 1840</span><h3>Көтерілістің басталуы</h3><span class="ph-more">толығырақ ↻</span></div>
+              <div class="flip-face back"><h4>Сарыарқадағы күрес</h4><ul><li>Көкшетау, Ақмола өңіріндегі бекіністерге шабуылдар</li><li>1838 ж. Ақмола бекінісінің өртелуі</li><li>Көтеріліс Кіші жүз бен Орта жүзге таралды</li><li>Патша әкімшілігімен хат алмасу, келіссөздер</li></ul></div>
+            </div>
+          </div>
+          <div class="flip a" style="--d:.3s" tabindex="0">
+            <div class="flip-in">
+              <div class="flip-face front"><span class="ph-n">II</span><span class="ph-y">1841 – 1845</span><h3>Хандықтың құрылуы мен күшеюі</h3><span class="ph-more">толығырақ ↻</span></div>
+              <div class="flip-face back"><h4>Хандық шыңы</h4><ul><li>1841 ж. Кенесары хан сайланды</li><li>Мемлекеттік басқару жүйесі құрылды</li><li>Қоқан бекіністеріне жорықтар (Созақ, Жаңақорған)</li><li>1844 ж. Жантөрин жасағының талқандалуы</li></ul></div>
+            </div>
+          </div>
+          <div class="flip a" style="--d:.4s" tabindex="0">
+            <div class="flip-in">
+              <div class="flip-face front"><span class="ph-n">III</span><span class="ph-y">1846 – 1847</span><h3>Жетісудағы соңғы күрес</h3><span class="ph-more">толығырақ ↻</span></div>
+              <div class="flip-face back"><h4>Қозғалыстың жеңілуі</h4><ul><li>Торғай, Ырғызда бекіністер салынып, қоныс тарылды</li><li>1846 ж. Жетісуға, Іле бойына көшу</li><li>Қырғыз манаптарымен соғыс</li><li>1847 ж. Кенесары ханның қаза табуы</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. БАСҚАРУ ЖҮЙЕСІ -->
+    <section class="slide" data-title="Басқару жүйесі">
+      <div class="bg" style="background-image:url(img/council.jpg)"></div>
+      <div class="shade shade-strong"></div>
+      <div class="content content-wide">
+        <p class="kicker a">Мемлекеттік құрылым</p>
+        <h2 class="h2 h2-sm a" style="--d:.1s">Хандықты <span class="gold">басқару жүйесі</span></h2>
+        <div class="gov">
+          <div class="gov-top a" style="--d:.15s">
+            <div class="gov-khan"><span class="crown">♛</span><b>ХАН</b><small>Жоғарғы билік · Абылай дәстүрі</small></div>
+            <div class="gov-link"></div>
+            <div class="gov-council"><b>Хан кеңесі</b><small>Сенімді батырлар, билер, сұлтандар. Маңызды мәселелер кеңесте шешілді. Кеңеске тегіне емес, ерлігі мен ақылына қарай адамдар алынды.</small></div>
+            <div class="gov-link"></div>
+          </div>
+          <div class="gov-grid">
+            <div class="gov-card tilt a" style="--d:.25s"><span class="gi">⚔</span><h4>Әскер</h4><p>20 мыңға дейін тұрақты әскер. Мыңдық, жүздік, ондықтарға бөлінді. Қатаң тәртіп, ерлерге марапат белгілері.</p></div>
+            <div class="gov-card tilt a" style="--d:.3s"><span class="gi">⚒</span><h4>Қару-жарақ</h4><p>Оқ-дәрі мен қару жасайтын шеберханалар ашылды, шеберлер арнайы тартылды.</p></div>
+            <div class="gov-card tilt a" style="--d:.35s"><span class="gi">⚖</span><h4>Сот</h4><p>Билер соты әдет-ғұрып пен шариғат негізінде жүрді. Ұрлық пен барымтаға қатаң жаза берілді.</p></div>
+            <div class="gov-card tilt a" style="--d:.4s"><span class="gi">◎</span><h4>Салық</h4><p>Зекет — мал басынан, ұшыр — егін өнімінен алынды. Салық әскер мен мемлекет қажетіне жұмсалды.</p></div>
+            <div class="gov-card tilt a" style="--d:.45s"><span class="gi">✉</span><h4>Дипломатия</h4><p>Ресей, Қоқан, Хиуа, Бұхарамен хат алмасты. Хатшылар мен елшілер жасағы, хан мөрі болды.</p></div>
+            <div class="gov-card tilt a" style="--d:.5s"><span class="gi">❦</span><h4>Шаруашылық</h4><p>Егіншілік дамытылды, сауда керуендері қорғалды. Жансыздар (барлау) қызметі жұмыс істеді.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. СЕРІКТЕРІ -->
+    <section class="slide" data-title="Серіктері">
+      <div class="bg" style="background-image:url(img/battle.jpg)"></div>
+      <div class="shade shade-strong"></div>
+      <div class="content">
+        <p class="kicker a">Кенесарыға байланысты тұлғалар</p>
+        <h2 class="h2 a" style="--d:.1s">Ханның <span class="gold">серіктері</span></h2>
+        <div class="grid3 people">
+          <article class="person tilt a" style="--d:.15s"><span class="medal">Н</span><div><h3>Наурызбай батыр</h3><p>Кенесарының інісі, қаһарман батыр. 1847 жылы ағасымен бірге қаза тапты.</p></div></article>
+          <article class="person tilt a" style="--d:.2s"><span class="medal">Б</span><div><h3>Бопай ханым</h3><p>Кенесарының қарындасы. Ақылды, батыл, жорықтарға қатысқан қайраткер әйел.</p></div></article>
+          <article class="person tilt a" style="--d:.25s"><span class="medal">А</span><div><h3>Ағыбай батыр</h3><p>Ханның ең сенімді қолбасшыларының бірі, көптеген шайқастардың басшысы.</p></div></article>
+          <article class="person tilt a" style="--d:.3s"><span class="medal">И</span><div><h3>Иман батыр</h3><p>Хан кеңесінің мүшесі, Кенесарының адал серігі, белгілі әскер басы.</p></div></article>
+          <article class="person tilt a" style="--d:.35s"><span class="medal">Ж</span><div><h3>Жоламан Тіленшіұлы</h3><p>Кіші жүздегі азаттық күрестің батыры, Кенесары қозғалысын қолдады.</p></div></article>
+          <article class="person tilt a" style="--d:.4s"><span class="medal">Н</span><div><h3>Нысанбай жырау</h3><p>Ханның жанындағы жырау. «Кенесары – Наурызбай» дастанының авторы.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. АЯҚТАЛУЫ -->
+    <section class="slide" data-title="Қозғалыстың аяқталуы">
+      <div class="bg" style="background-image:url(img/ending.jpg)"></div>
+      <div class="shade shade-strong"></div>
+      <div class="content">
+        <p class="kicker a">1846 – 1847</p>
+        <h2 class="h2 a" style="--d:.1s">Қозғалыстың <span class="gold">аяқталуы</span></h2>
+        <div class="split split-even">
+          <ol class="vsteps a" style="--d:.2s">
+            <li><b>1845</b><span>Патша үкіметі Торғай мен Ырғыз өзендері бойында бекіністер салып, Кенесарының қонысын тарылтты.</span></li>
+            <li><b>1846</b><span>Хан әскерімен Жетісуға, Іле бойына көшті. Ұлы жүздің бір бөлігі қолдады, кейбір сұлтандар патша жағына шықты.</span></li>
+            <li><b>1847</b><span>Қырғыз манаптарымен соғыс басталды. Тоқмақ маңындағы Кекілік-Сеңгір (Майтөбе) шайқасында хан тұтқынға түсіп, қаза тапты.</span></li>
+            <li><b>Соңы</b><span>Наурызбай батыр мен көптеген серіктері де қаза тапты. Ханның басы Омбыға жіберілді деген деректер бар.</span></li>
+          </ol>
+          <div class="card card-dark tilt a" style="--d:.35s">
+            <h3 class="card-title">Жеңілу себептері</h3>
+            <ul class="list list-tight">
+              <li>Күштердің теңсіздігі — патша әскерінің қару-жарақ артықшылығы</li>
+              <li>Рулар арасындағы алауыздық</li>
+              <li>Кейбір сұлтандар мен билердің патша жағына шығуы</li>
+              <li>Жан-жақтан салынған бекіністер қоршауы</li>
+              <li>Қырғыздармен болған қайғылы соғыс</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12. ТАРИХИ МАҢЫЗЫ -->
+    <section class="slide" data-title="Тарихи маңызы">
+      <div class="bg" style="background-image:url(img/khan.jpg)"></div>
+      <div class="shade shade-strong"></div>
+      <div class="content">
+        <p class="kicker a">Мұра</p>
+        <h2 class="h2 a" style="--d:.1s">Тарихи <span class="gold">маңызы</span></h2>
+        <div class="stats a" style="--d:.2s">
+          <div class="stat tilt"><b data-count="10">0</b><span>жыл азаттық күрес</span></div>
+          <div class="stat tilt"><b data-count="3">0</b><span>жүзді біріктірді</span></div>
+          <div class="stat tilt"><b data-count="20000">0</b><span>сарбазға дейін әскер</span></div>
+          <div class="stat tilt"><b data-count="45">0</b><span>жасында қаза тапты</span></div>
+        </div>
+        <div class="grid2">
+          <div class="card tilt a" style="--d:.3s"><h3>Соңғы хандық</h3><p>Қазақ мемлекеттілігін қалпына келтіруге бағытталған ең ірі және соңғы әрекет болды.</p></div>
+          <div class="card tilt a" style="--d:.35s"><h3>Ұлттық сана</h3><p>Халықтың азаттық рухын оятып, кейінгі ұлт-азаттық көтерілістерге үлгі болды.</p></div>
+          <div class="card tilt a" style="--d:.4s"><h3>Әдебиеттегі бейнесі</h3><p>Нысанбай жыраудың дастаны, І. Есенберлиннің «Көшпенділер» трилогиясындағы «Қаһар» романы.</p></div>
+          <div class="card tilt a" style="--d:.45s"><h3>Тарихи жады</h3><p>Е. Бекмахановтың зерттеулері. 2001 жылы Астанада Кенесары ханға ескерткіш орнатылды.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 13. ҚОРЫТЫНДЫ -->
+    <section class="slide" data-title="Қорытынды">
+      <div class="bg" style="background-image:url(img/steppe.jpg)"></div>
+      <div class="shade shade-strong"></div>
+      <div class="content content-narrow center">
+        <p class="kicker a">Қорытынды</p>
+        <h2 class="h2 a" style="--d:.1s">Тәуелсіздік жолындағы <span class="gold">он жыл</span></h2>
+        <blockquote class="quote a" style="--d:.25s">
+          Кенесары Қасымұлы — тәуелсіз қазақ мемлекетін қайта құруды мақсат еткен соңғы хан. Ол үш жүзді біріктіріп, тұрақты әскер, салық, сот, дипломатия жүйесі бар хандық құрды. Қозғалыс жеңіліске ұшырағанымен, оның азаттық идеясы ұрпақтан-ұрпаққа жалғасып, бүгінгі Тәуелсіз Қазақстанның рухани тірегіне айналды.
+        </blockquote>
+        <div class="takeaways a" style="--d:.4s">
+          <span>Бірлік</span><span>Ерлік</span><span>Тәуелсіздік</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 14. РАХМЕТ -->
+    <section class="slide" data-title="Назарларыңызға рахмет">
+      <div class="bg" style="background-image:url(img/hero.jpg)"></div>
+      <div class="shade"></div>
+      <div class="content center">
+        <div class="final-orb a"><span>◆</span></div>
+        <h2 class="title title-final a" style="--d:.15s"><span class="gold">Назарларыңызға рахмет!</span></h2>
+        <p class="lead a" style="--d:.3s">Кенесары Қасымұлының хандық құрған кезеңдері</p>
+        <div class="authors authors-center a" style="--d:.45s">
+          <div class="author"><span class="author-label">Орындаған</span><span class="author-name">И. Ұлдана</span><span class="author-sub">9 сынып оқушысы</span></div>
+          <div class="author"><span class="author-label">Жетекшісі</span><span class="author-name">М. Перизат</span><span class="author-sub">тарих пәні</span></div>
+        </div>
+        <button class="btn-ghost a" style="--d:.6s" data-go="0">↺ Басына оралу</button>
+      </div>
+    </section>
+
   </main>
 
-  <!-- ===== FOOTER ===== -->
-  <footer class="footer">
-    <div class="container footer-grid">
-      <div class="footer-brand">
-        <div class="logo">
-          <svg class="logo-mark" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect width="64" height="64" rx="14" fill="#161412"/>
-            <circle cx="41" cy="23" r="8.5" fill="#D97706"/>
-            <path d="M20 49 L23.5 22.5 Q23.9 19.5 27.5 19.5 Q31.1 19.5 31.5 22.5 L35 49 Z" fill="#C5A059"/>
-            <path d="M13 49 H51" stroke="#C5A059" stroke-width="2.4" stroke-linecap="round"/>
-          </svg>
-          <span class="logo-title">ЖАҢАТАС</span>
-        </div>
-        <p class="footer-desc">
-          Жаңатас — Қаратау жотасы баурайындағы тас пен тау қаласы.
-          Табиғаты, тарихы және зәулім ғимараттары бір кеңістікте.
-        </p>
-      </div>
-      <div class="footer-col">
-        <p class="footer-col-title">Бөлімдер</p>
-        <a href="#tabigaty">Табиғаты</a>
-        <a href="#taryhy">Тарихы</a>
-        <a href="#gimaryttary">Ғимараттары</a>
-        <a href="#galereya">Галерея</a>
-        <a href="#karta">Карта</a>
-        <a href="#tulgalar">Тұлғалар</a>
-      </div>
-      
-      <div class="footer-coord reveal">
-        <p class="coord-value">43°36′ N · 69°27′ E</p>
-        <p class="coord-region">Жамбыл облысы, Мойынқұм ауданы, Қазақстан</p>
-        <p class="coord-quote">«Жаңатас — жаңа тастан өрлеген қала»</p>
-      </div>
-    </div>
-    <div class="footer-giant" aria-hidden="true">ЖАҢАТАС</div>
-    <div class="footer-bottom">
-      <div class="container footer-bottom-inner">
-        <span>© 2026 Жаңатас — виртуалды қала порталы</span>
-        <span>Табиғат · Тарих · Сәулет</span>
-      </div>
-    </div>
-  </footer>
-
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
